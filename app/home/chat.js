@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { withAuthProtection } from '../../components/withAuthProtection';
 
-function HomeScreen() {
+function ChatScreen() {
     return (
         <View style={styles.container}>
             <Text>
-                WELCOME HOME
+             chat screen
             </Text>
         </View>
     )
@@ -20,4 +20,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default withAuthProtection(HomeScreen)
+export default withAuthProtection(ChatScreen)
