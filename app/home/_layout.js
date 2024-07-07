@@ -1,12 +1,11 @@
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { FontAwesome6 } from '@expo/vector-icons';
-import { Foundation } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue', headerShown:false }}>
+    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue', headerShown:false}}>
       <Tabs.Screen
         name="index"
         options={{
@@ -19,6 +18,13 @@ export default function TabLayout() {
         options={{
           title: '',
           tabBarIcon: ({ color }) => <FontAwesome5 name="comments" size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="notification"
+        options={{
+          title: '',
+          tabBarIcon: ({ color }) => <Octicons name="bell" size={24} color={color} />,
         }}
       />
       <Tabs.Screen

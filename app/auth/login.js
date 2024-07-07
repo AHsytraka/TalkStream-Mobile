@@ -12,7 +12,7 @@ export default function LoginScreen() {
     try {
       const response = await authService.login(usernameOrEmail, password);
       console.log('Connexion reussit', response.data);
-      if(response.data.jwt)
+      if(response.data)
         {
           router.push('/home');
         }
