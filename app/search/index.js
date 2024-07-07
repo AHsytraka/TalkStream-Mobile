@@ -49,7 +49,7 @@ function SearchScreen() {
             <FlatList 
               data={users}
               keyExtractor={item => item.uid.toString()}
-              renderItem={({ item }) => <Text onPress={}>{item.username}</Text>}
+              renderItem={({ item }) => <Text>{item.username}</Text>}
             />
         </View>
     )
