@@ -2,10 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, Text, TextInput, FlatList } from 'react-native';
 import { withAuthProtection } from '../../components/withAuthProtection';
 import axios from 'axios';
+import {useRouter, router } from 'expo-router';
 
 function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [users, setUsers] = useState([]);
+
 
   const debounce = (func, wait)=> {
     let timeout;
@@ -38,6 +40,10 @@ function SearchScreen() {
     }
   },[searchQuery, debouncedSearchUser]);
 
+  const toSearchResult = (username) => {
+    router.navigate(`/search/${username}`)
+  }
+
     return (
         <View style={styles.container}>
             <TextInput
@@ -49,7 +55,9 @@ function SearchScreen() {
             <FlatList 
               data={users}
               keyExtractor={item => item.uid.toString()}
-              renderItem={({ item }) => <Text>{item.username}</Text>}
+              renderItem={({ item }) => 
+                  <Text onPress={() => toSearchResult(item.username)}>{item.username}</Text> 
+              }
             />
         </View>
     )

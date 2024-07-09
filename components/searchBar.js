@@ -32,26 +32,23 @@ export default function SearchBar({ onSearch }){
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row',
+        flex:1,
+        width:50,
+        flexDirection: 'row-reverse',
         alignItems: 'center',
-        backgroundColor:'#f0f0f0',
-        borderRadius: 20,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        position: 'relative',
-        width: 250,
-        height: 50,
+        backgroundColor:'white',
+        borderRadius: 10,
     },
+
     searchInput: {
         flex: 1,
         fontSize: 16,
         padding: 10,
-        paddingLeft: 35,
+        width: '100%',
+        height: 50,
         // width: 100,
     },
     searchIcon: {
-        position: 'absolute',
-        left: 10,
-        top: 14,
+        paddingLeft:15,
     }
 })

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { View, StyleSheet, Text, Button, TouchableOpacity } from 'react-native';
 import { withAuthProtection } from '../../components/withAuthProtection';
 import { Octicons } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import PostCard from '../../components/postCard';
 
@@ -28,6 +28,9 @@ function HomeScreen() {
                     <Link href="/search">
                         <Octicons name="search" size={32} color='gray' />
                     </Link>
+                    {/* <Link href="/home/chat">
+                    <FontAwesome5 name="comments" size={32} color='gray' />
+                    </Link> */}
                 </View>
             </View>
 

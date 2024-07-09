@@ -1,6 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext } from 'react';
+import { router } from 'expo-router';
 
 const API_URL = 'https://localhost:7129'; 
 
@@ -38,6 +39,7 @@ const login = async (usernameOrEmail,password) => {
 const logout = async () => {
     await AsyncStorage.removeItem('token');
     await AsyncStorage.removeItem('userData');
+    router.replace('/auth/Login');
 }
 
 const getToken = async() => {
@@ -51,10 +53,22 @@ const getToken = async() => {
   }
 }
 
+const fetchUser = async () => {
+  try {
+    const userDataString = await AsyncStorage.getItem('userData');
+    const userData = JSON.parse(userDataString);
+    return userData;
+  } catch (error) {
+    console.error('Failed to fetch user data', error);
+    return null;
+  }
+};
+
 
 export default {
   register,
   login,
   logout,
-  getToken
+  getToken,
+  fetchUser
 };
