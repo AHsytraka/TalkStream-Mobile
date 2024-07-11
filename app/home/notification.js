@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
 import { withAuthProtection } from '../../components/withAuthProtection';
 import authService from '../../services/authService';
-import axios from 'axios';
+import { getReceivedFriendRequests, respondToFriendRequest } from '../../services/friendshipService';
 
 
 
@@ -71,43 +71,24 @@ function FriendsTab() {
   }, []);
 
   useEffect(() => {
-    fetchRequests();
+    if (currentUser) {
+      const fetchRequests = async () => {
+        console.log(currentUser)
+        const res = await getReceivedFriendRequests(currentUser.uid);
+        setFriendRequests(res);
+      };
+      fetchRequests();
+    }
   }, [currentUser]);
 
-  const fetchRequests = async () => {
-    if (currentUser?.uid) {
-      try {
-        const response = await axios.get(`https://localhost:7129/Users/ReceivedFriendRequest?uid=${currentUser.uid}`);
-        setFriendRequests(response.data);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  };
+  const addFriend = async (requesterId, addresseeId) => {
+    const accept = true;
+    await respondToFriendRequest(requesterId, addresseeId, accept);
+  }
 
-  const addFriend = async (requestId) => {
-    const acceptDM = true;
-    console.log(acceptDM)
-    try {
-      const response = await axios.post(`https://localhost:7129/Users/respondToFriendRequest/${requestId}?isAccepted=${acceptDM}`);
-      console.log(response.data);
-      fetchRequests();
-    } catch(e)
-    {
-      console.log(e);
-    }
-  };
-  const DeleteDM = async (requestId) => {
-    const acceptDM = false;
-    console.log(acceptDM);
-    try {
-      const response = await axios.post(`https://localhost:7129/Users/respondToFriendRequest/${requestId}?isAccepted=${acceptDM}`);
-      console.log(response.data);
-      fetchRequests();
-    } catch(e)
-    {
-      console.log(e);
-    }
+  const decline = async (requesterId, addresseeId) => {
+    const accept = false;
+    await respondToFriendRequest(requesterId, addresseeId, accept);
   }
 
   const viewProfil = () => {
@@ -123,15 +104,15 @@ function FriendsTab() {
             {/* <Image source={{ uri: item.image }} style={styles.avatar} /> */}
           </TouchableOpacity>
           <View style={styles.friendContent}>
-            <Text style={styles.name}>{item.requesterName}</Text>
+            <Text style={styles.name}></Text>
             <Text style={styles.mutualFriends}>hello friend !</Text>
             <View row={true} style={styles.btnAmis}>
 
-              <Pressable onPress={() => addFriend(item.id)} style={styles.btnCf}>
+              <Pressable onPress={() => addFriend(item.requesterId, item.addresseeId)} style={styles.btnCf}>
                 <Text style={{ color: 'white' }}> Confirmer</Text>
               </Pressable>
 
-              <Pressable onPress={() => DeleteDM(item.id)} style={styles.btnDel} >
+              <Pressable onPress={() => decline(item.requesterId, item.addresseeId)} style={styles.btnDel} >
                 <Text>Supprimer</Text>
               </Pressable>
             </View>

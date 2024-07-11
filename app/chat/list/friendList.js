@@ -1,25 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router";
+import { router, useRouter } from "expo-router";
 import SearchBar from "../../../components/searchBar";
 import authService from "../../../services/authService";
 import axios from "axios";
+import { getAllFriends } from "../../../services/friendshipService";
 
 
-const getInitials = (name)=>{
-    return name.split(' ').map((word)=> word[0]).join('');
+const getInitials = (name) => {
+    return name.split(' ').map((word) => word[0]).join('');
 };
 
-const UserItem = ({uid,name})=>(
-    <View style={styles.userContainer}>
+const UserItem = ({ uid, name }) => (
+    <TouchableOpacity
+        onPress={() => router.push(`/chat/${uid}`)}
+        style={styles.userContainer}>
         <View style={styles.avatar}>
-        <Text style={styles.avatarText}>{getInitials(name)}</Text>
+            <Text style={styles.avatarText}>{getInitials(name)}</Text>
         </View>
         <Text style={styles.nameText}>{name}</Text>
-    </View>
+    </TouchableOpacity>
 );
 
-export default function FriendList(){
+export default function FriendList() {
     const [currentUser, setCurrentUser] = useState(null);
     const [contacts, setContacts] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
@@ -30,25 +33,20 @@ export default function FriendList(){
             const userData = await authService.fetchUser(); // Use fetchUser from authService
             setCurrentUser(userData);
         }
-        
+
         initialize();
     }, []);
 
     useEffect(() => {
-        if(currentUser)
-        {
+        if (currentUser) {
             fetchFriends(currentUser.uid);
         }
     }, [currentUser])
 
     const fetchFriends = async (uid) => {
-        try {
-            const response = await axios.get(`https://localhost:7129/Users/Friends?uid=${uid}`);
-            setContacts(response.data);
-            setFilteredData(response.data);
-        } catch (e) {
-            console.error(e);
-        }
+        const res =  await getAllFriends(uid);
+        setContacts(res);
+        setFilteredData(res);
     };
 
     const handleSearch = (query) => {
@@ -56,31 +54,23 @@ export default function FriendList(){
             setFilteredData(contacts);
             return;
         }
-        const filtered = contacts.filter(item => item.username.toLowerCase().includes(query.toLowerCase()));
+        const filtered = contacts.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
         setFilteredData(filtered);
     }
-    
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <SearchBar onSearch={handleSearch} style={styles.search}/>
+                <SearchBar onSearch={handleSearch} style={styles.search} />
             </View>
-            <TouchableOpacity
-                onPress={() => {router.push({
-                    pathname: `/users/${filteredData.id}`,
-                    params: { name: filteredData.name, lastMessage: 'last', id: filteredData.id }
-                   });
-                   console.log(filteredData.name)
-                }
-                }
-            >
+            <View>
                 <FlatList
-                data={filteredData}
-                keyExtractor={(item) => item.uid}
-                renderItem={({ item }) => <UserItem name={item.username} uid={item.uid} />}
-            />
-            </TouchableOpacity>
-            
+                    data={filteredData}
+                    keyExtractor={(item) => item.uid}
+                    renderItem={({ item }) => <UserItem name={item.name} uid={item.uid} />}
+                />
+            </View>
+
         </View>
     )
 }
@@ -93,22 +83,22 @@ const styles = StyleSheet.create({
     },
     header: {
         display: 'flex',
-        width:'100%',
+        width: '100%',
         backgroundColor: '#0f142b',
-        flexDirection:'row',
-     },
+        flexDirection: 'row',
+    },
     userContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        width:'90%',
+        width: '90%',
         padding: 10,
         marginBottom: 5,
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#ddd',
-      },
-      avatar: {
+    },
+    avatar: {
         width: 40,
         height: 40,
         borderRadius: 20,
@@ -116,18 +106,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 10,
-      },
-      avatarText: {
+    },
+    avatarText: {
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
-      },
-      nameText: {
+    },
+    nameText: {
         fontSize: 18,
         fontWeight: 'bold',
-      },
-      search: {
+    },
+    search: {
         backgroundColor: 'rgb(255, 255, 255)',
         width: '100%'
-      }
+    }
 })

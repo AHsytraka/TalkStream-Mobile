@@ -1,23 +1,25 @@
-import * as signalR from '@microsoft/signalr';
+import * as signalR from "@microsoft/signalr";
 
-class SignalRService {
-  constructor() {
-    this.connection = new signalR.HubConnectionBuilder()
-      .withUrl("https://localhost:7129/notificationHub")
-      .withAutomaticReconnect()
-      .configureLogging(signalR.LogLevel.Information)
-      .build();
+export const connection = new signalR.HubConnectionBuilder()
+    .withUrl("https://localhost:7129/hub")
+    .configureLogging(signalR.LogLevel.Information)
+    .withAutomaticReconnect()
+    .build();
 
-    this.connection.start()
-      .then(() => console.log('Connection started'))
-      .catch(err => console.log('Error while starting connection: ' + err));
-  }
+connection.start().catch(err => console.error(err.toString()));
 
-  subscribeToFriendRequests(callback) {
-    this.connection.on('ReceiveFriendRequest', message => {
-      callback(message);
-    });
-  }
-}
+export const sendMessage = async (senderId, receiverId, message) => {
+    await connection.invoke("SendMessage", senderId, receiverId, message);
+};
 
-export const signalRService = new SignalRService();
+export const getMessages = async (currentUserId, otherUserId) => {
+    await connection.invoke("GetMessages", currentUserId, otherUserId);
+};
+
+export const onReceiveMessage = (callback) => {
+    connection.on("ReceiveMessage", callback);
+};
+
+export const onReceiveMessageHistory = (callback) => {
+    connection.on("ReceiveMessageHistory", callback);
+};

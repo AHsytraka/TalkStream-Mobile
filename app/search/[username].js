@@ -3,9 +3,8 @@ import { StyleSheet, View,Text, Pressable, Button } from "react-native";
 import { withAuthProtection } from "../../components/withAuthProtection";
 import { useLocalSearchParams } from "expo-router";
 import axios from "axios";
-import { sendFriendRequest } from "../../services/userService";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import authService from "../../services/authService";
+import { getAllFriends, sendFriendRequest } from "../../services/friendshipService";
 
 function SearchResultScreen() {
     const [currentUser, setCurrentUser] = useState(null);
@@ -45,12 +44,8 @@ function SearchResultScreen() {
     }
 
     const fetchFriends = async (uid) => {
-        try {
-            const response = await axios.get(`https://localhost:7129/Users/Friends?uid=${uid}`);
-            setFriends(response.data);
-        } catch (e) {
-            console.error(e);
-        }
+        const res = await getAllFriends(uid);
+        setFriends(res);
     };
 
     const isUserAFriend = (userUid) => {
