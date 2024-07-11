@@ -1,24 +1,33 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, Text, Button, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Text, Button, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { withAuthProtection } from '../../components/withAuthProtection';
 import { Octicons } from '@expo/vector-icons';
-import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import PostCard from '../../components/postCard';
+import axios from 'axios';
 
 function HomeScreen() {
+    const [publications, setPublications] = useState([]);
 
-    const post = {
-        postId: 1,
-        userId:1,
-        postContent: 'This is a post',
-        postDate: '2021-09-01',
-        postLikes: 0,
-        postComments: 0,
-    }
+    useEffect(() => {
+        const fetchPubs = async () => {
+            try {
+                const res = await axios.get('https://localhost:7129/Publications')
+                setPublications(res.data)
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        fetchPubs();
+    }, [publications])
+
+    const renderItem = ({ item }) => (
+        <PostCard post={item} />
+    );
 
     return (
-        <View>
+        <View style={styles.container}>
             <View style={styles.header}>
                 <Text>TS</Text>
                 <View style={styles.header}>
@@ -33,15 +42,22 @@ function HomeScreen() {
                     </Link> */}
                 </View>
             </View>
-
-            <View style={styles.container}>
-                <PostCard post={post}/>
+            
+            <View style={styles.messContainer}>
+                <FlatList
+                    data={publications}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.id.toString()}
+                />
             </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex:1
+    },
     header: {
         display: 'flex',
         height: 50,
@@ -50,10 +66,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: '#f8f8f8',
     },
-    container: {
-        margin: 10,
-        display: 'flex',
-        flexDirection: 'column',
+    messContainer: {
+        flex:1,
+        margin: 15
     },
 });
 

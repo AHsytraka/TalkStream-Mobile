@@ -14,7 +14,7 @@ export default function LoginScreen() {
       console.log('Connexion reussit', response.data);
       if(response.data)
         {
-          router.push('/home');
+          router.replace('/home');
         }
     }
     catch(error) {

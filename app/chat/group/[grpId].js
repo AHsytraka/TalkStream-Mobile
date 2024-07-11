@@ -17,44 +17,7 @@ const Chat = () => {
     const [cancelButtonIndex, setCancelButtonIndex] = useState(0);
 
     useEffect(() => {
-        setMessages([
-            {
-                _id: 1,
-                text: 'lastMessage',
-                createdAt: new Date(),
-                user: {
-                    _id: 2,
-                    name: name,
-                },
-            },
-            {
-                _id: 2,
-                text: 'Hello, how are you?',
-                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 jour auparavant
-                user: {
-                    _id: 1,
-                    name: 'Current User',
-                },
-            },
-            {
-                _id: 3,
-                text: 'I am fine, thank you!',
-                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 - 1000 * 60 * 5), // 1 jour et 5 minutes auparavant
-                user: {
-                    _id: 3,
-                    name: 'lara jean',
-                },
-            },
-            {
-                _id: 4,
-                text: 'What about you?',
-                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 - 1000 * 60 * 10), // 1 jour et 10 minutes auparavant
-                user: {
-                    _id: 2,
-                    name: name,
-                },
-            },
-        ]);
+        
     }, [name]);
 
     const onSend = useCallback((messages = []) => {
@@ -239,36 +202,6 @@ const Chat = () => {
             }
         );
     };
-
-    // const showMenuOptions = () => {
-    //     const options = ['Leave Group', 'Add Member'];
-    //     if (1 === 1) { // replace 1 with the current user's id
-    //         options.push('Delete Group', 'Remove Member');
-    //     }
-    //     options.push('Cancel');
-    //     const cancelButtonIndex = options.length - 1;
-
-    //     setActionOptions(options);
-    //     setCancelButtonIndex(cancelButtonIndex);
-    //     actionSheetRef.current.show();
-    // };
-
-    // const handleMenuOption = (index) => {
-    //     switch (actionOptions[index]) {
-    //         case 'Leave Group':
-    //             leaveGroup();
-    //             break;
-    //         case 'Add Member':
-    //             addMember();
-    //             break;
-    //         case 'Delete Group':
-    //             deleteGroup();
-    //             break;
-    //         case 'Remove Member':
-    //             removeMember();
-    //             break;
-    //     }
-    // };
 
     const leaveGroup = () => {
         // Logic to leave group

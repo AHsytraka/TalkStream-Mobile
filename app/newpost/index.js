@@ -1,14 +1,37 @@
 import { withAuthProtection } from '../../components/withAuthProtection';
-
-import React, { useState } from 'react';
+import authService from '../../services/authService';
+import React, { useState , useEffect} from 'react';
 import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
+import axios from 'axios';
+import { router } from 'expo-router';
 
 function NewPostScreen() {
     const [postContent, setPostContent] = useState('');
+    const [user, setUser] = useState();
 
-    const handleSubmit = () => {
-        Alert.alert('Post Submitted', postContent);
+    useEffect(() => {
+        const initialize = async () => {
+            const userData = await authService.fetchUser(); // Use fetchUser from authService
+            setUser(userData);
+        }
+  
+        initialize();
+    }, []);
+
+    const handleSubmit = async () => {
+        const publicationDto = {
+            UserId: user?.uid,
+            Content: postContent
+        };
+
+        try {
+        const res = await axios.post('https://localhost:7129/Publications', publicationDto);
+        console.log(res.data);
         setPostContent('');
+        router.replace('/home');
+        } catch(e) {
+            console.error(e);
+        }
     };
 
     const handleAddPhoto = () => {
@@ -24,9 +47,9 @@ function NewPostScreen() {
                 value={postContent}
                 onChangeText={setPostContent}
             />
-            <TouchableOpacity style={styles.photoButton} onPress={handleAddPhoto}>
+            {/* <TouchableOpacity style={styles.photoButton} onPress={handleAddPhoto}>
                 <Text style={styles.photoButtonText}>Add/Take Photo</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <Button title="Post" onPress={handleSubmit} />
         </View>
     );

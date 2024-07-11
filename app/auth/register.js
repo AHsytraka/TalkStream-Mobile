@@ -17,7 +17,7 @@ export default function RegisterScreen() {
       console.log('Inscription reussit', response.data);
       if(response.data.jwt)
         {
-          router.push('/home');
+          router.replace('/home');
         }
     }catch(error) {
       console.error(error);

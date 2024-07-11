@@ -5,6 +5,7 @@ import { useRouter } from "expo-router";
 import SearchBar from "../../../components/searchBar";
 import authService from "../../../services/authService";
 import { getAllFriends } from "../../../services/friendshipService";
+import { createGroup } from "../../../services/groupService";
 
 
 export default function CreerGroup(){
@@ -53,11 +54,12 @@ export default function CreerGroup(){
         });
       };
 
-    const handleAdd = () => {
-        console.log('Selected Users:', selectedUsers);
+    const handleAdd = async () => {
+        const res = await createGroup(groupName, user.uid, selectedUsers);
+        console.log(res);
         router.push({
-          pathname: `../group/1`,
-          params: {name: groupName, members: selectedUsers, id: user.uid},
+          pathname: `../group/${res.id}`,
+          params: {name: groupName, members: selectedUsers, id: user},
         })
       };
 
