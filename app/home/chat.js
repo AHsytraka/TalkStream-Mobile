@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -11,26 +11,48 @@ import { Svg, Path } from 'react-native-svg';
 import { BlurView } from 'expo-blur';
 import { useRouter } from "expo-router";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-
 import SearchBar from "../../components/searchBar";
+import authService from "../../services/authService";
+import { getUsersConversation } from "../../services/conversationService";
 
 export default function ChatScreen(){
 
     const router = useRouter();
     const [conversations, setConversations] = useState([]);
-    const [filteredData, setFilterdData] = useState(conversations);
+    const [filteredData, setFilterdData] = useState([]);
+    const [user, setUser] = useState(null);
+
+
+    useEffect(() => {
+      const initialize = async () => {
+        const userData = await authService.fetchUser();
+        if (userData && userData.uid !== user?.uid) {
+          setUser(userData);
+        }
+      };  
+      initialize();
+    }, []);
+
+    useEffect(() => {
+      if(user) {
+        const fetchConversations = async () => {
+            const conversations = await getUsersConversation(user.uid);
+            setConversations(conversations);
+            setFilterdData(conversations);
+            console.log(conversations)
+        };
+        fetchConversations();
+      }
+    },[user])
 
     const renderItem = ({ item }) => (
        
             <TouchableOpacity
-               onPress={() => router.push({
-                pathname: `/chat/users/${item.id}`,
-                params: { name: item.name, lastMessage: item.lastMessage, id: item.id }
-               })}
+                onPress={() => router.push(`/chat/${item.otherUserId}`)}
                >
                 <View style={styles.box}>
-                    <Text style={styles.conversationName}>{item.name}</Text>
-                    <Text style={styles.conversationMessage}>{item.lastMessage}</Text>
+                    <Text style={styles.conversationName}>{item.otherUserName}</Text>
+                    {/* <Text style={styles.conversationMessage}>{item.lastMessage}</Text> */}
                 </View>
             </TouchableOpacity>
        
@@ -75,7 +97,7 @@ export default function ChatScreen(){
                     style={styles.body}
                     data={filteredData}
                     renderItem={renderItem}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item) => item.otherUserId}
                 />               
             </View>
           </BlurView>

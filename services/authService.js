@@ -21,19 +21,25 @@ const register = async (username, email,password) => {
       }
 };
 
-const login = async (usernameOrEmail,password) => {
-    try {
-        const response = await axios.post(`${API_URL}/Account/login`, {usernameOrEmail, password});
-        if(response.data.jwt) {
+const login = async (usernameOrEmail, password) => {
+  try {
+      const response = await axios.post(`${API_URL}/Account/login`, { usernameOrEmail, password });
+      if (response.data.jwt) {
           await AsyncStorage.setItem('token', response.data.jwt);
           await AsyncStorage.setItem('userData', JSON.stringify(response.data));
-        }
-
-        return response;
-      } catch(error) {
-        console.error('Registration failed', error.response.data);
-        throw error;
       }
+
+      return response;
+  } catch (error) {
+      // Check if error.response is defined
+      if (error.response) {
+          console.error('Login failed', error.response.data);
+      } else {
+          // Handle cases where error.response is undefined
+          console.error('Login failed', error.message);
+      }
+      throw error;
+  }
 };
 
 const logout = async () => {
