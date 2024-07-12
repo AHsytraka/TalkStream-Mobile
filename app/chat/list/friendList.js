@@ -13,8 +13,8 @@ const getInitials = (name) => {
 
 const UserItem = ({ uid, name }) => (
     <TouchableOpacity
-        onPress={() => router.push(`/chat/${uid}`)}
-        style={styles.userContainer}>
+    onPress={() => router.push(`/chat/${uid}?name=${encodeURIComponent(name)}`)}
+    style={styles.userContainer}>
         <View style={styles.avatar}>
             <Text style={styles.avatarText}>{getInitials(name)}</Text>
         </View>

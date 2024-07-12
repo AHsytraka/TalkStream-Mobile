@@ -84,7 +84,8 @@ export default function ChatScreen(){
                   color='white' 
                   size={28}
                   backgroundColor='transparent'    
-                  onPress={()=> router.push(`/chat/list/creerGroup`)}            
+                  // onPress={()=> router.push(`/chat/list/creerGroup`)}
+                  onPress={()=> router.push(`/chat/createGroup`)}
                   >
                 </FontAwesome.Button>
               </TouchableOpacity>

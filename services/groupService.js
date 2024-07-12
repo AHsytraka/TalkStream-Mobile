@@ -1,36 +1,18 @@
 import axios from 'axios';
-const API_URL = 'https://localhost:7129/Group';
+import { connection } from './signalRGroup';
 
-export const createGroup = async (name, creatorId, memberIds) => {
-  try {
-    const response = await axios.post(`${API_URL}/create`, {
-      name,
-      creatorId,
-      memberIds,
-    });
-    return response.data; // Ensure this contains the groupId property
-  } catch (error) {
-    console.error('Error creating group:', error);
-    throw error;
-  }
+const API_URL = 'https://localhost:7129';
+
+export const createGroup = async (group) => {
+    const response = await axios.post(`${API_URL}/Group`, group);
+    return response.data;
 };
 
-export const getGroupMessages = async (groupId) => {
-  try {
-    const response = await axios.get(`${API_URL}/${groupId}/messages`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching group messages:', error);
-    throw error;
-  }
+export const addUserToGroup = async (groupId, userGroup) => {
+    await axios.post(`${API_URL}/Group/${groupId}/addUser`, userGroup);
 };
 
 export const sendMessage = async (groupId, message) => {
-  try {
-    const response = await axios.post(`${API_URL}/${groupId}/messages`, message);
-    return response.data;
-  } catch (error) {
-    console.error('Error sending message:', error);
-    throw error;
-  }
+    await axios.post(`${API_URL}/Group/${groupId}/messages`, message);
+    connection.invoke("SendMessage", groupId, message.senderId, message.content);
 };
