@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native
 import { router, useRouter } from "expo-router";
 import SearchBar from "../../../components/searchBar";
 import authService from "../../../services/authService";
-import axios from "axios";
 import { getAllFriends } from "../../../services/friendshipService";
 
 
@@ -63,7 +62,7 @@ export default function FriendList() {
             <View style={styles.header}>
                 <SearchBar onSearch={handleSearch} style={styles.search} />
             </View>
-            <View>
+            <View style={styles.header}>
                 <FlatList
                     data={filteredData}
                     keyExtractor={(item) => item.uid}
@@ -84,13 +83,15 @@ const styles = StyleSheet.create({
     header: {
         display: 'flex',
         width: '100%',
-        backgroundColor: '#0f142b',
+        backgroundColor: '#fcfcfc',
         flexDirection: 'row',
     },
     userContainer: {
+        flex: 1,
+        justifyContent:'center',
         flexDirection: 'row',
         alignItems: 'center',
-        width: '90%',
+        width: '100%',
         padding: 10,
         marginBottom: 5,
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
@@ -110,11 +111,10 @@ const styles = StyleSheet.create({
     avatarText: {
         color: '#fff',
         fontSize: 16,
-        fontWeight: 'bold',
     },
     nameText: {
         fontSize: 18,
-        fontWeight: 'bold',
+        textAlign:'center'
     },
     search: {
         backgroundColor: 'rgb(255, 255, 255)',

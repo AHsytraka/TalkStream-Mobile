@@ -63,14 +63,14 @@ const CreateGroup = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Create Group</Text>
+            <Text style={styles.title}>Groupe de discussion</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Group Name"
+                placeholder="Nom du groupe"
                 value={groupName}
                 onChangeText={setGroupName}
             />
-            <Text style={styles.subtitle}>Select Friends</Text>
+            <Text style={styles.subtitle}>Ajouter des amis</Text>
             <FlatList
                 data={friends}
                 keyExtractor={(item) => item.uid}
@@ -99,7 +99,6 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 24,
-        fontWeight: 'bold',
         marginBottom: 20,
     },
     input: {
@@ -112,7 +111,6 @@ const styles = StyleSheet.create({
     },
     subtitle: {
         fontSize: 18,
-        fontWeight: 'bold',
         marginBottom: 10,
     },
     friendsList: {
@@ -135,13 +133,13 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     checkboxSelected: {
-        backgroundColor: '#4caf50',
+        backgroundColor: 'blue',
     },
     friendName: {
         fontSize: 16,
     },
     createButton: {
-        backgroundColor: '#4caf50',
+        backgroundColor: 'blue',
         paddingVertical: 15,
         alignItems: 'center',
         borderRadius: 5,
@@ -149,7 +147,6 @@ const styles = StyleSheet.create({
     createButtonText: {
         color: '#fff',
         fontSize: 16,
-        fontWeight: 'bold',
     },
 });
 

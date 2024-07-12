@@ -17,6 +17,10 @@ import { getUsersConversation } from "../../services/conversationService";
 
 export default function ChatScreen(){
 
+  const getInitials = (name) => {
+    return name.split(' ').map((word) => word[0]).join('');
+};
+
     const router = useRouter();
     const [conversations, setConversations] = useState([]);
     const [filteredData, setFilterdData] = useState([]);
@@ -48,8 +52,11 @@ export default function ChatScreen(){
     const renderItem = ({ item }) => (
        
             <TouchableOpacity
-                onPress={() => router.push(`/chat/${item.otherUserId}`)}
-               >
+            onPress={() => router.push(`/chat/${item.otherUserId}?name=${encodeURIComponent(item.otherUserName)}`)}
+             style={styles.userContainer}>
+                      <View style={styles.avatar}>
+            <Text style={styles.avatarText}>{getInitials(item.otherUserName)}</Text>
+        </View>
                 <View style={styles.box}>
                     <Text style={styles.conversationName}>{item.otherUserName}</Text>
                     {/* <Text style={styles.conversationMessage}>{item.lastMessage}</Text> */}
@@ -108,6 +115,17 @@ export default function ChatScreen(){
 }
 
 const styles = StyleSheet.create({
+    userContainer: {
+      flex:1,
+      alignItems: 'center',
+      flexDirection: 'row',
+      height: 60,
+      width: 352,
+      backgroundColor: 'rgba(255, 255, 255, 0.5)',
+      borderRadius: 10,
+      marginBottom: 3,
+      padding:10,
+    },
     container: {
         flex:1,
         fontSize: 18,
@@ -123,7 +141,6 @@ const styles = StyleSheet.create({
     navbarText: {
         color: '#ffffff',
         fontSize: 30,
-        fontWeight: 'bold',
         // fontFamily: 'Arial',
         marginTop: 10,
         marginLeft: 20,
@@ -147,18 +164,31 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     box: {
-        height: 60,
-        width: 352,
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-        borderRadius: 10,
-        marginBottom: 3,
-        // marginStart: 1,
-        paddingStart: 6,
-        // elevation: 10,
+        // height: 60,
+        // width: 352,
+        // backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        // borderRadius: 10,
+        // marginBottom: 3,
+        // // marginStart: 1,
+        // paddingStart: 6,
+        // // elevation: 10,
     },
+
+    avatar: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: '#1B1A55',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: 10,
+  },
+  avatarText: {
+      color: '#fff',
+      fontSize: 16,
+  },
     conversationName: {
         fontSize: 18,
-        fontWeight: 'bold',
     },
     conversationMessage: {
         fontSize: 16,

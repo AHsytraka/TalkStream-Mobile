@@ -177,7 +177,6 @@ const Chat = () => {
                 cancelButtonIndex,
                 textStyle: {
                     fontSize: 16,
-                    fontWeight: 'bold',
                 },
                 titleTextStyle: {
                     color: '#007bff',

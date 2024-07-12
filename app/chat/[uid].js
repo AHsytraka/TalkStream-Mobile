@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import axios from 'axios';
 import authService from '../../services/authService';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { FontAwesome } from '@expo/vector-icons';
+
 
 export default function HubScreen() {
     const params = useLocalSearchParams();
@@ -105,13 +107,28 @@ export default function HubScreen() {
                     onChangeText={setNewMessage}
                     placeholder="Type a message"
                 />
-                <Button title="Send" onPress={sendMessage} />
+                {/* <Button title="Envoyer" onPress={sendMessage} /> */}
+                <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
+                    <Text style={styles.sendButtonText}>Envoyer</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+
+    sendButton: {
+        backgroundColor: '#4caf50',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+    },
+    sendButtonText: {
+        color: '#fff',
+        fontSize: 16,
+    },
+
     container: {
         flex: 1,
         padding: 10,
@@ -125,7 +142,6 @@ const styles = StyleSheet.create({
     },
     headText: {
         fontSize: 20,
-        fontWeight: 'bold',
     },
     messageList: {
         flex: 1,
@@ -163,6 +179,5 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     username: {
-        fontWeight: '500',
     },
 });

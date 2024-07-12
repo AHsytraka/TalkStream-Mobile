@@ -3,40 +3,61 @@ import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, Pressable } 
 import { withAuthProtection } from '../../components/withAuthProtection';
 import authService from '../../services/authService';
 import { getReceivedFriendRequests, respondToFriendRequest } from '../../services/friendshipService';
-
-
+import notificationService from '../../services/notificationService';
 
 function PostsTab() {
+  const [user, setUser] = useState();
   const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    const initialize = async () => {
+      const userData = await authService.fetchUser();
+      if (userData && userData.uid !== user?.uid) {
+        setUser(userData);
+      }
+
+      // notificationService.start();
+      // notificationService.addNotificationHandler(handleNotification);
+    };
+
+    initialize();
+
+    return () => {
+      // notificationService.removeNotificationHandler(handleNotification);
+    };
+  }, []);
+
+  // const handleNotification = (message) => {
+  //   setNotifications(prevNotifications => [...prevNotifications, message]);
+  // };
+
   const viewPost = () => {
     router.push('../unePost');
-  }
+  };
 
   return (
     <FlatList
       style={styles.root}
       data={notifications}
       ItemSeparatorComponent={() => {
-        return <View style={styles.separator} />
+        return <View style={styles.separator} />;
       }}
-      keyExtractor={item => {
-        return item.id
-      }}
+      keyExtractor={item => item.id}
       renderItem={item => {
-        const Notification = item.item
-        let attachment = <View />
+        const Notification = item.item;
+        let attachment = <View />;
 
-        let mainContentStyle
+        let mainContentStyle;
         if (Notification.attachment) {
-          mainContentStyle = styles.mainContent
-          attachment = <Image style={styles.attachment} source={{ uri: Notification.attachment }} />
+          mainContentStyle = styles.mainContent;
+          attachment = <Image style={styles.attachment} source={{ uri: Notification.attachment }} />;
         }
-        let bckLuNonLu = null
+        let bckLuNonLu = null;
         if (!Notification.lu) {
-          bckLuNonLu = styles.bcklu
+          bckLuNonLu = styles.bcklu;
         }
         return (
-          <><TouchableOpacity style={[styles.container, bckLuNonLu]} onPress={viewPost}>
+          <TouchableOpacity style={[styles.container, bckLuNonLu]} onPress={viewPost}>
             <Image source={{ uri: Notification.image }} style={styles.avatar} />
             <View style={styles.content}>
               <View style={mainContentStyle}>
@@ -48,8 +69,8 @@ function PostsTab() {
               </View>
               {attachment}
             </View>
-          </TouchableOpacity></>
-        )
+          </TouchableOpacity>
+        );
       }}
     />
   );
@@ -73,7 +94,6 @@ function FriendsTab() {
   useEffect(() => {
     if (currentUser) {
       const fetchRequests = async () => {
-        console.log(currentUser)
         const res = await getReceivedFriendRequests(currentUser.uid);
         setFriendRequests(res);
       };
@@ -84,15 +104,14 @@ function FriendsTab() {
   const addFriend = async (requesterId, addresseeId) => {
     const accept = true;
     await respondToFriendRequest(requesterId, addresseeId, accept);
-  }
+  };
 
   const decline = async (requesterId, addresseeId) => {
     const accept = false;
     await respondToFriendRequest(requesterId, addresseeId, accept);
-  }
+  };
 
-  const viewProfil = () => {
-  }
+  const viewProfil = () => {};
 
   return (
     <FlatList
@@ -104,21 +123,18 @@ function FriendsTab() {
             {/* <Image source={{ uri: item.image }} style={styles.avatar} /> */}
           </TouchableOpacity>
           <View style={styles.friendContent}>
-            <Text style={styles.name}></Text>
+            <Text style={styles.name}>Sitraka</Text>
             <Text style={styles.mutualFriends}>hello friend !</Text>
             <View row={true} style={styles.btnAmis}>
-
               <Pressable onPress={() => addFriend(item.requesterId, item.addresseeId)} style={styles.btnCf}>
                 <Text style={{ color: 'white' }}> Confirmer</Text>
               </Pressable>
-
-              <Pressable onPress={() => decline(item.requesterId, item.addresseeId)} style={styles.btnDel} >
+              <Pressable onPress={() => decline(item.requesterId, item.addresseeId)} style={styles.btnDel}>
                 <Text>Supprimer</Text>
               </Pressable>
             </View>
           </View>
         </View>
-
       )}
     />
   );
@@ -137,7 +153,6 @@ function NotificationScreen() {
           <Text style={selectedTab === 'Friends' ? styles.activeTabText : styles.inactiveTabText}>Friends</Text>
         </TouchableOpacity>
       </View>
-
       {selectedTab === 'Posts' ? <PostsTab /> : <FriendsTab />}
     </View>
   );
@@ -161,15 +176,12 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   activeTabText: {
-    fontWeight: 'bold',
     color: '#fff',
     fontSize: 17,
-
   },
   inactiveTabText: {
     color: '#fef',
     fontSize: 16,
-
   },
   container: {
     padding: 16,
@@ -181,7 +193,6 @@ const styles = StyleSheet.create({
   bcklu: {
     backgroundColor: '#EDE3EE',
   },
-
   text: {
     marginBottom: 5,
     flexDirection: 'row',
@@ -237,13 +248,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 10,
   },
-
   mutualFriends: {
     marginTop: 5,
     color: '#888',
   },
   btnAmis: {
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
+    flexDirection: 'row',
   },
   btnCf: {
     backgroundColor: '#48469C',
@@ -254,7 +265,6 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: 5,
     borderRadius: 4,
-
   },
   btnDel: {
     backgroundColor: 'lightgrey',
@@ -265,8 +275,7 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: 5,
     borderRadius: 4,
-
-  }
+  },
 });
 
-export default withAuthProtection(NotificationScreen)
+export default withAuthProtection(NotificationScreen);

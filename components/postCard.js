@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
     },
     posterName: {
         marginLeft: 10,
-        fontWeight: 'bold',
     },
     content: {
         marginBottom: 5,
@@ -153,14 +152,12 @@ const styles = StyleSheet.create({
     },
     modalTitle: {
         fontSize: 20,
-        fontWeight: 'bold',
         marginBottom: 10,
     },
     comment: {
         marginBottom: 10,
     },
     commentUser: {
-        fontWeight: 'bold',
     },
     commentDate: {
         fontSize: 12,

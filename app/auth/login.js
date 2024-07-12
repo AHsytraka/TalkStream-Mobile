@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TextInput, Button } from 'react-native';
+import { View, StyleSheet, Text, TextInput, Button, Pressable } from 'react-native';
 import React, { useState } from 'react';
 import authService from '../../services/authService';
 import { useRouter } from 'expo-router';
@@ -24,7 +24,7 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text>Connexion</Text>
+      <Text style={styles.inscription}>Connexion</Text>
 
       {/* <Text style={styles.label}>Adresse email ou Nom d'utilisateur</Text> */}
       <TextInput
@@ -42,12 +42,20 @@ export default function LoginScreen() {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
+
+      <Pressable style={styles.regbtn} onPress={handleLogin} >
+        <Text style={styles.regtext} >Connexion</Text>
+      </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+
+  inscription: {
+    fontSize: 25,
+    marginBottom: 20,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
@@ -55,12 +63,25 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '80%',
-    padding: 10,
+    padding: 20,
     marginVertical: 10,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
+    borderRadius: 15,
   },
+
+  regbtn: {
+    width: '80%',
+    borderRadius: 20,
+    padding: 20,
+    backgroundColor: '#4A249D'
+  },
+
+  regtext: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 16,
+  }
 
 //   label: {
 //     width: '80%',

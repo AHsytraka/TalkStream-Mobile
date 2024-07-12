@@ -137,12 +137,10 @@ const styles = StyleSheet.create({
     },
     avatarText: {
       color: 'white',
-      fontWeight: 'bold',
       // fontSize: 30,
     },
     name: {
       fontSize: 18,
-      fontWeight: 'bold',
     },
     groupNameInput: {
       height: 40,  
@@ -163,7 +161,6 @@ const styles = StyleSheet.create({
       color: 'white',
       paddingTop: 6,
       fontSize: 20,
-      fontWeight: 'bold',
     },
     CheckBox: {
       marginLeft: 'auto',

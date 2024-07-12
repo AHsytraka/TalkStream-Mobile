@@ -7,6 +7,7 @@ import axios from 'axios';
 
 const GroupChat = () => {
     const { groupId } = useLocalSearchParams();
+    // const groupName = params.name ? decodeURIComponent(params.name) : '';
     const [user, setUser] = useState();
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
@@ -73,7 +74,9 @@ const GroupChat = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Group Chat</Text>
+            <View style={styles.head}>
+                {/* <Text style={styles.headText}>{groupName}</Text> */}
+            </View>
             <FlatList
                 data={messages}
                 keyExtractor={(item, index) => index.toString()}
@@ -88,7 +91,7 @@ const GroupChat = () => {
                     onChangeText={setMessage}
                 />
                 <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
-                    <Text style={styles.sendButtonText}>Send</Text>
+                    <Text style={styles.sendButtonText}>Envoyer</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -101,9 +104,17 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#f0f0f0',
     },
+
+    head: {
+        padding: 10,
+        backgroundColor: '#f8f8f8',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+
     title: {
         fontSize: 24,
-        fontWeight: 'bold',
         marginBottom: 10,
     },
     messagesList: {
@@ -126,7 +137,6 @@ const styles = StyleSheet.create({
     },
     senderName: {
         fontSize: 16,
-        fontWeight: 'bold',
     },
     messageText: {
         fontSize: 16,
@@ -161,7 +171,6 @@ const styles = StyleSheet.create({
     sendButtonText: {
         color: '#fff',
         fontSize: 16,
-        fontWeight: 'bold',
     },
 });
 

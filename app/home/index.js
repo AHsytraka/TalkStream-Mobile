@@ -5,11 +5,24 @@ import { Octicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import PostCard from '../../components/postCard';
 import axios from 'axios';
+import authService from '../../services/authService';
 
 function HomeScreen() {
     const [publications, setPublications] = useState([]);
+    const [user, setUser] = useState();
 
     useEffect(() => {
+        const initialize = async () => {
+            const userData = await authService.fetchUser();
+            if (userData && userData.uid !== user?.uid) {
+              setUser(userData);
+            }
+          };  
+          initialize();
+    },[])
+
+    useEffect(() => {
+
         const fetchPubs = async () => {
             try {
                 const res = await axios.get('https://localhost:7129/Publications')
@@ -20,7 +33,7 @@ function HomeScreen() {
         }
 
         fetchPubs();
-    }, [publications])
+    }, [])
 
     const renderItem = ({ item }) => (
         <PostCard post={item} />
@@ -31,10 +44,10 @@ function HomeScreen() {
             <View style={styles.header}>
                 <Text>TS</Text>
                 <View style={styles.header}>
-                    <Link href="/newpost">
+                    <Link href="/newpost" >
                         <Octicons name="diff-added" size={32} color='gray' />
                     </Link>
-                    <Link href="/search">
+                    <Link href="/search" >
                         <Octicons name="search" size={32} color='gray' />
                     </Link>
                     {/* <Link href="/home/chat">
@@ -55,6 +68,7 @@ function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+
     container: {
         flex:1
     },

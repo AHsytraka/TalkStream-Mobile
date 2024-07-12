@@ -54,6 +54,9 @@ function SearchResultScreen() {
 
     return (
         <View style={styles.container}>
+            <View style={styles.head}>
+                <Text>Resultat pour {username}</Text>
+            </View>
             {users.map((user, index) => (
                 <View key={index} style={styles.userContainer}>
                     <Text style={styles.userName}>{user.username}</Text>
@@ -72,8 +75,18 @@ function SearchResultScreen() {
 }
 
 const styles = StyleSheet.create({
+    head: {
+        padding: 10,
+        marginVertical: 5,
+        backgroundColor: '#ffffff',
+        borderWidth: 1,
+        width: '100%',
+        borderColor: '#dddddd',
+        borderRadius: 5,
+        textAlign: 'center',
+        
+    },
     container: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#f5f5f5',
